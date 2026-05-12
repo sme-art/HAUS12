@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAUS12 – Smoothies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Tenor+Sans&family=Playfair+Display:wght@300&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #faf8f5;
+      --ink: #1a1a1a;
+      --mid: #6b6560;
+      --border: #d8d2cb;
+      --accent: #c8a97e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Tenor Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── LOGO ── */
+    .logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--mid);
+      margin-bottom: 52px;
+      margin-top: -8px;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: normal;
+      font-size: 2.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* ── SMOOTHIE CARDS ── */
+    .menu {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .smoothie-item {
+      border-top: 1px solid var(--border);
+    }
+    .smoothie-item:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .smoothie-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .smoothie-header:hover .smoothie-name {
+      color: var(--accent);
+    }
+
+    .smoothie-name {
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .chevron {
+      width: 14px;
+      height: 14px;
+      border-right: 1px solid var(--mid);
+      border-bottom: 1px solid var(--mid);
+      transform: rotate(45deg);
+      transition: transform 0.35s ease, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .smoothie-item.open .chevron {
+      transform: rotate(-135deg);
+      border-color: var(--accent);
+    }
+
+    /* ── INGREDIENT LIST ── */
+    .ingredient-list {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .smoothie-item.open .ingredient-list {
+      max-height: 1000px;
+    }
+
+    .ingredient-inner {
+      padding: 0 4px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .ingredient-item {
+      border-top: 1px solid var(--border);
+    }
+
+    .ingredient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 14px 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ingredient-header:hover .ing-name {
+      color: var(--accent);
+    }
+
+    .ing-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+
+    .ing-chevron {
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid var(--mid);
+      border-bottom: 1px solid var(--mid);
+      transform: rotate(45deg);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+    .ingredient-item.open .ing-chevron {
+      transform: rotate(-135deg);
+    }
+
+    .ing-desc {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ingredient-item.open .ing-desc {
+      max-height: 200px;
+    }
+
+    .ing-desc-inner {
+      padding: 0 0 16px 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--mid);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 64px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo-wrap">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaYAAAGiCAYAAACs4GIVAAAM2ElEQVR4nO3dW7acqhoG0Fp7pBXV/7bZjbUfVmrEGO9y+YE5n3L2SUpE5BNEfb0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgMve7/d37TLU9H6/v0evA/rzX+0CwFOjds7zfR5x/+mXYKJp0zR9ff6sc4Y+fB3/FYhtGUjzsOrRfH9731fGZMRE85ads5ETtE0w0bRPCI0ycjBaYgSCiabNO+fe7zf1uE+wRjBBA0a7j8bYBBNd6XHUJJQYjWCia72EE4xEMNGdnlbpGS0xIsEEjRBKjEIw0aVpmr6O7jdFH0lZGs6oBBPDitzZb4Vm9DCFFAQTw+ihU48cppCKYKJrax15pLeRtzjFCLm5+qJ70Ve2LV+r5N4So9PoGUL0cPpopZyQk6k8CMIUHvwQTHRt6+3jLYSA0RKjEkwMq4VwghEJJrq2N+qINCIRkvCHYGJYkcMgUmhCaYKJIbzf72+dPbRBMDGErVBajppqjKIij9ygBsEEMxFGVRHKADUJJoay9YqiGmU52raRFKMSTACEIpggKFN6jEowMZwoHb6pOlgnmOBVPiS2thclNKEmwcQwjFCgDYKJYUQajUQqC0QjmAAIRTBBBWvTikZR8EMwwW/uQUEMggmAUAQTQzJtBnEJJgBCEUwAhCKYoDCLLGCfYAIgFMEEhVl4AfsEE8yYZoP6BBMAoQgmAEIRTLDBtB7U8at2ASC39/v9/VlwMP/z2X+79//nWsjw2a6FEoxIo6d5I49sBBc9MpVH8850zvO/M03TV6kOfW27R9sWNozOCcCwjr6JdHXaL+W2YWRGTAzlyrSfoIA6BBNDmS+CqF0WYJ1ggt+MkCAGwQQVrIWgURz8EEwAhCKYoAKjI9gmmKAC97Ngm2ACIBTBxHA83AqxCSaYqX3vp/b2IQLBBJUYpcE6wcRQan3GAjhPMDG8mmG0t23TeoxKMDGUZRAYIUE8gomhtDAK8fVaRieYoDIBBH8TTHTvMwJpYbT00VJZITXBRPe2RiQRRiqm7eBfgokhRB2BCCT4l2CCoKKGKeQmmCAIoyf44USge8uRR/QAaK28kJoREwChCCa61uLoY1lG95oYjWCiWzp0aJNgYhifkUgLgWXUxMgEE13qoSMXToxKMDGEeSffwn0mGJlgontbQRR5BOJVRYxMo6d5y058Hji9dOw97hNsMWKiedM0fbW0sOGpEfaRsQkmutHiM0tnWQjBSAQTXeoplD563CdYo6HTvJ5HSmvcb6J3Rkx0a4TprhH2kfG42qJ5I48gLCunR0ZMNG0rlIwkAKhCAEF/jJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAVN7v9/f7/f6uXQ7y+Bxfx7h9W8fQsQVC0jntuxvOUUM9dZn2fi9qHYzgq3YBInu/39/TNIWto+jle73+nPjRyzmaZYd79fjM/33JY5u6za8Fz97v7wWVNp7Or9oFiOyooel0t0W70mwhxHM6Oh5XO+iSSpxnW799pR3XCuseDV15R41umqavsw0zdUNM3bGXvqottf2r9XTmmOYoa4rj+WRUk1uJOst9js1/P1XdCah7hq20HCdt7imGJ2oHU64ytFBPpTu5p9NNd8pb6sKs5jn2ZFQloK5RWTMRTsgtTzq30idFyWA6s90zIpft9XoWKGfumSz/TqpO+6pSo9kU+7ecHq4xEu/V8BV1tXG9XvVu9taaVrzjqJPMec+nhXrK0YnlnPrK3emWPmY5z/NaF2Y9+a92AWp70lhKzOHPy3emrJEb/9V9SbGdqKZp+toq5517SblC6cnCg7PnR8l7YSUCMMVCitENH0xLRw2yVOd6ZvutKflcyJXj2JurI+wzv7X889V/u1TrAegz7SJn2xBO5wimC6J3ZlHKd+bkq3mCRqmn16vcFFgqT0YDZ8Oo1vFJud1IbaxFggkCedqhlRjR55jW+4xUSnTopS6cTOndJ5hu0LCec0X53N475HK30RTHr2QYnSnL3v+mLMF0g0a77czT71HuM7Xs6FmlEvt+ZRvzENorX29vU+llP0oTTCtabkw1R3NGkmNLefxbf2vFEefKPsHUiWhh+ilPtHK1LNqigRzPopVuNym2I2TSE0ydiDgFcvRJgZJl6UHKZeApbL0NIcVvR/udPZHOuV4IJpJYu7fkhKW2vVctaZ9xCSayq70IojfROtTaD53TH8FEUjqmegT9usjfmmKdYKIIHUHfojyPRB8EE489uVJ3lb9P/TwXMTAjlikSn1YnmSefCXCirrvzpvG7/3YE6qQNRkzQIB3sdfPQNhKNTTAFF/0EuvL81JXONPp+RyCcrqmxetDCi3sEU3CjNuJR9zul6J8fgS2C6SYn9L068ExTWkcBfvQNJBcAdWjv+wTTTTVP6FE6EyfvOWfbg/osa28ab5Rz+C7B1KAIHUyEMnD9HYk1PmfOH5+6dxz2WS7OY1ev/qZp+lo7KZfLxl1VXnPlJa+Wled1tOhBne8zYrpp5KsdnVoca/V/59mno3tRpGHEdI4R0wXLK/pRvsSa6gHYK7/jodt7PvW2NSo9+xufPzsG151ZIq5e96mcDS1ezZR+NuPp9kqsFGvhOZISQfC0PW99e6l0eaMduzUttLnojJi4pMXA5vlHBn1v6xznRxqC6YbaJ2Qvjf/sIgju21pQ0ksbaoG2fJ1gumDUBrYWFKPWRWu2jtOTe6WppnJ7s6xH9XOfVXk31bziLN3gc15lO3nr+yyW8E0lohBMN9U8gUeYhhlhHyN4cqPeEvM/jJbSMpXHKZYQ92ltSm85chI8+4RSekZMwdXuFEps34tdY9iayjszxedY/RBKaQim4M429FwnxJMHNaPqbX9yujJSHq1el9OYQikdU3lclroD2juhc6wA04Gcp67WjRbCpRkxUZ2TvB1H03o9LoY4s08CPC3BRHhO+vpGvsFvMUh5pvLYVXoO3ZsgYtpaFDFaJz1yQJdkxMSmUp3OaJ3bEfURk1AqRzCxquRJ6ANq10R6sHWU4xWhrkcimDiU85VE89908hORz1iUJ5huivauvFTlWVuenfOlnWdHS8v9e7K/JY/dlW0t9//Kv40W6tHKc8dWIAml/AQTf4n8WYQWH2Z88lDqlX1spT6iW7axiOfBCAQT/6h9k3f0h2mvlFnHmdb8wqzEeRDlXmE0gqlBJRtyyY59tBN0tP2NygO08QgmQvJi1/Mi1knLHfneSCllXUc8blF4wJYwSo/OInWekcoymq3g2XqoOMU2hdI+IyY2l2zX7ixTbT/i6OvJtnOuyryqpw62p31pnWAinKMOorcOpPYFQGot7c+nLdVc8OM9fP8STDNPnjmJ6Oz+RNuX3M9LbSm1QirXqDRCp1aqLV3d162/v7YkPPc+7B3/aOdiLYJpJuozPDU6zBx/P+VvpHygeOuT4jnKkfs4XnmTxpMHeGsvcz57nD7lPDudmysYIr1GqgWC6YJar8+5+7T51ZN37b+n+P3cv5FiW3ePZ8Rnjs6+qSN13Ud8tODKuWO0EodVeQvRp7/2yhdtpVlud/Z372n+XK9e2ptGSrmdnI7ug5Sekrwzsj17L2erXRntlCOYLore+UcvX6+u1Pt8yjjn1NF8W6l/d6619nZ0YbL3d1Jqrd5KUjG/3WmIpRtWqtFciWmrJ0qVL8eV+ZnfTlGPV+vo6TZzjfrm4VxinyKNegTTtmErJnUDLTX9c1fqhR1R9zd3Z3X3mahl/acOirPTVCnDO/dCkSfWRqWRQulDOK0bslJyNdDIS39znJzR9vdJeXJ3Wlv3LFKMyLamBqO189LB8OQzIiUIpW0qBhaijiqfqB381H9rf0tUDGw4mgZarvBrqaMpfY8KwQRAQNGmEwEAAGiNOU44odV7SQAAAHW4kQ0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwOv1Px3yBQNznTBbAAAAAElFTkSuQmCC" alt="HAUS12 Logo" style="width:160px; height:auto;" />
+  </div>
+  <div class="tagline">Longevity Bar &amp; Wellness Store</div>
+
+  <h1 class="section-title">SMOOTHIES</h1>
+
+  <nav class="menu" id="menu">
+
+    <!-- ── Purple Brain ── -->
+    <div class="smoothie-item" data-smoothie>
+      <div class="smoothie-header" onclick="toggleSmoothie(this)">
+        <span class="smoothie-name">Purple Brain</span>
+        <span class="chevron"></span>
+      </div>
+      <div class="ingredient-list">
+        <div class="ingredient-inner">
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Wildblaubeeren</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reich an Anthocyanen, starken Antioxidantien, die oxidativen Stress reduzieren und die kognitive Funktion sowie das Langzeitgedächtnis schützen.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Banane</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reich an Kalium und Vitamin B6, unterstützt die Neurotransmitterproduktion und liefert nachhaltige Energie für Gehirn und Muskeln.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Rote Beete</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Enthält Nitrate, die die Durchblutung des Gehirns verbessern und mentale Schärfe, Ausdauer sowie kognitive Leistungsfähigkeit fördern.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Walnussmus</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reich an pflanzlichen Omega-3-Fettsäuren (ALA), die die Gehirnstruktur unterstützen, Entzündungen reduzieren und die neuronale Kommunikation fördern.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Lion's Mane</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Enthält Hericenone und Erinacine, die die Produktion von NGF (Nervenwachstumsfaktor) anregen und die Unterstützung von Gedächtnis sowie Neuroplastizität fördern.</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Everglow ── -->
+    <div class="smoothie-item" data-smoothie>
+      <div class="smoothie-header" onclick="toggleSmoothie(this)">
+        <span class="smoothie-name">Everglow</span>
+        <span class="chevron"></span>
+      </div>
+      <div class="ingredient-list">
+        <div class="ingredient-inner">
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Kokosjogurt</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Enthält probiotische Kulturen, die die Darmflora stärken. Ein gesunder Darm ist eng mit klarer Haut und einem starken Immunsystem verbunden.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Mango &amp; Ananas</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reich an Vitamin C und Bromelain, fördern sie die Kollagenbildung, stärken das Immunsystem und unterstützen die zelluläre Erneuerung für strahlende Haut.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Kurkuma</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Curcumin ist eines der am besten erforschten natürlichen Entzündungshemmer, schützt Zellen vor oxidativem Stress und unterstützt die Langlebigkeit.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Amla Pulver</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Eine der vitaminreichsten Früchte der Welt mit besonders hohem Vitamin-C-Gehalt, stärkt das Immunsystem, fördert Haare, Haut und Nägel und wirkt stark antioxidativ.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Astaxanthin</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Als „King of Antioxidants" gilt Astaxanthin als vielfach stärker als Vitamin C und schützt Haut sowie Zellen vor UV-Schäden und Alterung.</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Calm & Collected ── -->
+    <div class="smoothie-item" data-smoothie>
+      <div class="smoothie-header" onclick="toggleSmoothie(this)">
+        <span class="smoothie-name">Calm &amp; Collected</span>
+        <span class="chevron"></span>
+      </div>
+      <div class="ingredient-list">
+        <div class="ingredient-inner">
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Zucchini</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Leicht verdaulich und reich an Antioxidantien wie Lutein, unterstützt die Darmgesundheit und liefert eine cremige Basis ohne Zuckerbelastung.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Ashwagandha</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Adaptogene Wurzel, die Cortisol senkt, Stress reguliert und die Resilienz des Nervensystems stärkt. Ein Eckpfeiler der Longevity-Medizin.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Haselnussmus</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reich an einfach ungesättigten Fettsäuren, Vitamin E und Magnesium und fördert damit Herzgesundheit, Nervenfunktion und anhaltende Sättigung.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Dattel</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Natürlicher Süßungsmittelersatz mit niedrigem glykämischen Index, reich an Ballaststoffen, Kalium und Antioxidantien für nachhaltige Energie.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Zimt</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Reguliert den Blutzuckerspiegel und wirkt antientzündlich, unterstützt die Insulinsensitivität und schützt vor metabolischem Stress.</div></div>
+          </div>
+
+          <div class="ingredient-item" data-ing>
+            <div class="ingredient-header" onclick="toggleIng(this)">
+              <span class="ing-name">Magnesium Glycinat</span>
+              <span class="ing-chevron"></span>
+            </div>
+            <div class="ing-desc"><div class="ing-desc-inner">Die bioverfügbarste Magnesiumform, beruhigt das Nervensystem, fördert Tiefschlaf, entspannt Muskeln und reduziert Stresssymptome nachhaltig.</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </nav>
+
+  <footer>© HAUS12 München</footer>
+
+  <script>
+    function toggleSmoothie(header) {
+      const item = header.closest('[data-smoothie]');
+      const isOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('[data-smoothie]').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    function toggleIng(header) {
+      const item = header.closest('[data-ing]');
+      item.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
